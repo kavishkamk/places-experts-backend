@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const placesRouter = require("./routes/places-routes");
+const usersRouter = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 
 const app = express();
@@ -11,6 +12,7 @@ const port = 5000;
 app.use(bodyParser.json());
 
 app.use("/api/places", placesRouter);
+app.use("/api/users", usersRouter);
 
 // handle unused routes
 app.use((req, res, next) => {
