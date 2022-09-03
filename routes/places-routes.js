@@ -24,10 +24,7 @@ router.post("/",
 router.patch("/:placeId", 
         [
             check("description")
-                .isLength({ min: 5 }),
-            check("address")
-                .not()
-                .isEmpty()
+                .isLength({ min: 5 })
         ],placeControllers.updatePlaceById);
 
 router.delete("/:placeId", placeControllers.deletePlaceById);

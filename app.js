@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const placesRouter = require("./routes/places-routes");
 const usersRouter = require("./routes/users-routes");
@@ -30,6 +31,22 @@ app.use((error, req, res, next) => {
     res.json({message: error.message || "unknown error occurred!"} )
 });
 
-app.listen(port, () => {
-    console.log("server started on port : " + port);
-});
+
+/*
+    connect to db 
+        - if success -> listen to incoming request
+        - else -> shuld down the server
+*/
+(async() => {
+    await mongoose.connect(process.env.MONGODB_URI)
+        .then(() => {
+            app.listen(port, () => {
+                console.log("server started on port : " + port);
+            });
+        })
+        .catch((error) => {
+            console.log("DB Connection Failed : " + error);
+            console.log("Server shutdown");
+            process.exit(1);
+        });
+})();
