@@ -26,7 +26,7 @@ const signUp = async (req, res, next) => {
         return next(new HttpError("Invalid input, please check again", 422));
     }
 
-    const {username, password, email, image} = req.body;
+    const {username, password, email} = req.body;
     let exsistingUser;
 
     try {
@@ -43,7 +43,7 @@ const signUp = async (req, res, next) => {
         name: username,
         email,
         password,
-        image,
+        image: "https://www.pexels.com/search/profile%20picture/",
         places: []
     });
 
@@ -74,10 +74,10 @@ const login = async (req, res, next) => {
         return next (new HttpError("Something went wrong, please try again later", 500));
     }
 
-    if (!identifiedUsers) {
+    if (!identifiedUsers || password !== identifiedUsers.password) {
         return next(new HttpError("Could not find user, credentials seems to be wrong", 401))
     }
-    res.json({message: "Login Success"});
+    res.json({message: "Login Success", user: identifiedUsers.toObject({getters: true})});
 };
 
 exports.getUsers = getUsers;

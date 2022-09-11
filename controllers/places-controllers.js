@@ -49,7 +49,7 @@ const createPlace = async (req, res, next) => {
         return next(new HttpError("Invalid input data", 422));
     }
 
-    const { title, description, imageUrl, address, creator} = req.body;
+    const { title, description, address, creator} = req.body;
 
     let user;
 
@@ -77,7 +77,7 @@ const createPlace = async (req, res, next) => {
     const createdPlace = new Place({
         title,
         description,
-        imageUrl,
+        imageUrl: "https://i.pinimg.com/474x/f5/08/16/f50816017bbead00daef61e007fe886e.jpg",
         address,
         location,
         creator
