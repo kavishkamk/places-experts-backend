@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
 const placesRouter = require("./routes/places-routes");
 const usersRouter = require("./routes/users-routes");
@@ -15,11 +17,13 @@ app.use(bodyParser.json());
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    // res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.setHeader("Access-Control-Allow-Headers", "*")
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
     next();
 });
 
+app.use("/upload/images", express.static(path.join("upload", "images")));
 app.use("/api/places", placesRouter);
 app.use("/api/users", usersRouter);
 
@@ -30,6 +34,13 @@ app.use((req, res, next) => {
 
 // handle errors
 app.use((error, req, res, next) => {
+
+    if(req.file) {
+        fs.unlink(req.file.path, (error) => {
+            console.log(error);
+        });
+    }
+
     if(res.headersSent) {
         return next(error);
     }
