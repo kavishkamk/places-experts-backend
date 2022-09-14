@@ -58,8 +58,8 @@ app.use((error, req, res, next) => {
 (async() => {
     await mongoose.connect(process.env.MONGODB_URI)
         .then(() => {
-            app.listen(port, () => {
-                console.log("server started on port : " + port);
+            app.listen(process.env.PORT || port, () => {
+                console.log("server started on port : " + (process.env.PORT || port));
             });
         })
         .catch((error) => {
